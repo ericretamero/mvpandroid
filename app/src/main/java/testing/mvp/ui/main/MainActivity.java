@@ -1,18 +1,29 @@
-package testing.mvp;
+package testing.mvp.ui.main;
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import javax.inject.Inject;
+
+import testing.mvp.R;
+import testing.mvp.application.App;
 import testing.mvp.common.BaseActiviy;
 
-public class MainActivity extends BaseActiviy {
+import testing.mvp.di.component.DaggerMainComponent;
+import testing.mvp.di.component.MainComponent;
+import testing.mvp.di.module.MainModule;
+
+public class MainActivity extends BaseActiviy implements MainView{
 
     private TextView mTextMessage;
 
+    @Inject
+    MainPresenter mainPresenter;
+
+    MainComponent mainComponent;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -30,7 +41,7 @@ public class MainActivity extends BaseActiviy {
 
                     return true;
                 case R.id.navigation_dashboard:
-                    mTextMessage.setText(R.string.title_dashboard);
+                   mainPresenter.test();
                     return true;
                 case R.id.navigation_notifications:
                     mTextMessage.setText(R.string.title_notifications);
@@ -53,4 +64,17 @@ public class MainActivity extends BaseActiviy {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
+    @Override
+    protected void invoke() {
+        mainComponent = DaggerMainComponent.builder()
+                .mainModule(new MainModule(this))
+                .build();
+        mainComponent.inject(this);
+        //Log.i("mainComponent", mainComponent.toString());
+    }
+
+    @Override
+    public void getData() {
+        mTextMessage.setText("getData");
+    }
 }

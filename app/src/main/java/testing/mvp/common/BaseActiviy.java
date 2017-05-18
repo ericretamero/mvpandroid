@@ -17,10 +17,15 @@ public abstract class BaseActiviy extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResource());
+        invoke();
+        initComponents();
+
     }
 
     protected abstract int getLayoutResource();
 
     protected abstract void initComponents();
+
+    protected abstract void invoke();
 
 }
